@@ -144,7 +144,7 @@ const censoredName = (name) => {
             // claim energy refill r.dailyEnergyRefill
             break;
           }
-          const maxClicks = Math.min(100, Math.floor(energy / energyPerClick));
+          const maxClicks = Math.min(15, Math.floor(energy / energyPerClick));
           const clickAmount = Math.floor(Math.random() * maxClicks) + 1;
           if (clickAmount * energyPerClick > energy) {
             console.log('Insufficient energy');
