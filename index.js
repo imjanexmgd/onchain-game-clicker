@@ -142,14 +142,14 @@ const censoredName = (name) => {
             // claim energy refill r.dailyEnergyRefill
             break;
           }
-          const maxClicks = Math.floor(energy / energyPerClick);
+          const maxClicks = Math.min(100, Math.floor(energy / energyPerClick));
           const clickAmount = Math.floor(Math.random() * maxClicks) + 1;
           if (clickAmount * energyPerClick > energy) {
             console.log('Insufficient energy');
             break;
           }
           const doClick = await clickChain(token, clickAmount);
-          energy = Math.floor(doClick.energy);
+          energy = Math.floor(doClick.energy) + 1;
           await setTimeout(Math.random() * 100);
         }
         console.log(`${name} done`);
