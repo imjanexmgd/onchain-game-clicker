@@ -22,6 +22,7 @@ const getAccInfo = async (token) => {
         'if-none-match': 'W/"19a-Nxz/2KeXKz9hf6gVOHucjVGao4c"',
       },
     });
+
     return data.user;
   } catch (error) {
     throw error;
@@ -129,7 +130,7 @@ const censoredName = (name) => {
       const name = censoredName(r.fullName);
       const energyPerClick = r.energyLevel;
       console.log(
-        `logged as ${name} energy ${r.energy} ---- ${energyPerClick} energy/click`
+        `logged as ${name} energy ${r.energy} || ${energyPerClick} energy/click || statusBanned ${r.isBanned}`
       );
       let energy = r.energy;
       if (energy <= energyPerClick + 0.5) {
