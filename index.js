@@ -132,8 +132,10 @@ const censoredName = (name) => {
         `logged as ${name} energy ${r.energy} ---- ${energyPerClick} energy/click`
       );
       let energy = r.energy;
-      if (energy <= energyPerClick) {
-        console.log(`skipping because no energy`);
+      if (energy <= energyPerClick + 0.5) {
+        console.log(
+          `Skipping because there's not enough energy for a single click.`
+        );
         console.log('\n');
       } else {
         while (energy >= energyPerClick) {
