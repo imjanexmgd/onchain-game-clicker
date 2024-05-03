@@ -149,7 +149,7 @@ const censoredName = (name) => {
             break;
           }
           const doClick = await clickChain(token, clickAmount);
-          energy = Math.floor(doClick.energy) + 1;
+          energy = Math.floor(doClick.energy) - 1;
           await setTimeout(Math.random() * 100);
         }
         console.log(`${name} done`);
