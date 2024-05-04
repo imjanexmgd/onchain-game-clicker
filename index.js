@@ -54,7 +54,7 @@ const clickChain = async (token, clickamount) => {
         },
       }
     );
-    console.log(`success ${clickamount} click, current energy ${data.energy}`);
+
     return data;
   } catch (error) {
     // console.log(error);
@@ -128,7 +128,7 @@ const censoredName = (name) => {
       const token = await getToken(hash);
       const r = await getAccInfo(token.toString());
       const name = censoredName(r.fullName);
-      const energyPerClick = r.energyLevel;
+      const energyPerClick = parseInt(r.clickLevel);
       console.log(
         `logged as ${name} energy ${r.energy} || ${energyPerClick} energy/click || statusBanned ${r.isBanned}`
       );
@@ -145,15 +145,17 @@ const censoredName = (name) => {
             // claim energy refill r.dailyEnergyRefill
             break;
           }
-          const maxClicks = Math.min(15, Math.floor(energy / energyPerClick));
+          const maxClicks = Math.min(50, Math.floor(energy / energyPerClick));
           const clickAmount = Math.floor(Math.random() * maxClicks) + 1;
           if (clickAmount * energyPerClick > energy) {
             console.log('Insufficient energy');
             break;
           }
           const doClick = await clickChain(token, clickAmount);
-          energy = Math.floor(doClick.energy) - 1;
-          await setTimeout(Math.random() * 100);
+          console.log(
+            `success ${clickAmount} click  energy ${doClick.energy}  coins ${doClick.coins}  points ${doClick.clicks} `
+          );
+          energy = doClick.energy;
         }
         console.log(`${name} done`);
         console.log('\n');
