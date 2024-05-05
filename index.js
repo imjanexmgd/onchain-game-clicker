@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { setTimeout } from 'node:timers/promises';
 import fs from 'fs';
 const getAccInfo = async (token) => {
   try {
@@ -119,30 +118,58 @@ const censoredName = (name) => {
 
   return censoredName;
 };
+const claimDailyEnergy = async (token) => {
+  try {
+    const { data } = await axios.post(
+      'https://db4.onchaincoin.io/api/boosts/energy',
+      {},
+      {
+        headers: {
+          'User-Agent':
+            'Mozilla/5.0 (Linux; Android 11; Redmi Note 8 Build/RQ3A.211001.001; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/120.0.6099.144 Mobile Safari/537.36',
+          'sec-ch-ua':
+            '"Not_A Brand";v="8", "Chromium";v="120", "Android WebView";v="120"',
+          'sec-ch-ua-mobile': '?1',
+          authorization: `Bearer ${token}`,
+          'sec-ch-ua-platform': '"Android"',
+          origin: 'https://db4.onchaincoin.io',
+          'x-requested-with': 'org.telegram.mdgram',
+          'sec-fetch-site': 'same-origin',
+          'sec-fetch-mode': 'cors',
+          'sec-fetch-dest': 'empty',
+          referer: 'https://db4.onchaincoin.io/boost',
+          'accept-language': 'en,en-US;q=0.9',
+        },
+      }
+    );
+    console.log(`${data.user.fullName} success claim daily energy refill`);
+  } catch (error) {
+    throw error;
+  }
+};
 (async () => {
   try {
     process.stdout.write('\x1Bc');
     const hashFile = fs.readFileSync('req.txt', 'utf-8').replace(/\r/g, '');
     const hashArr = hashFile.split('\n');
+
     for (const hash of hashArr) {
       const token = await getToken(hash);
-      const r = await getAccInfo(token.toString());
+      let r = await getAccInfo(token.toString());
       const name = censoredName(r.fullName);
       const energyPerClick = parseInt(r.clickLevel);
       console.log(
         `logged as ${name} energy ${r.energy} || ${energyPerClick} energy/click || statusBanned ${r.isBanned}`
       );
-      let energy = r.energy;
-      if (energy <= energyPerClick + 0.5) {
-        console.log(
-          `Skipping because there's not enough energy for a single click.`
-        );
-        console.log('\n');
-      } else {
+      let dailyEnergyRefill = 1;
+      while (dailyEnergyRefill == 1) {
+        let energy = r.energy;
+
         while (energy >= energyPerClick) {
           if (energy < energyPerClick) {
-            console.log(`stopped because no energy`);
             // claim energy refill r.dailyEnergyRefill
+
+            console.log(`stopped because no energy`);
             break;
           }
           const maxClicks = Math.min(50, Math.floor(energy / energyPerClick));
@@ -157,10 +184,21 @@ const censoredName = (name) => {
           );
           energy = doClick.energy;
         }
-        console.log(`${name} done`);
-        console.log('\n');
+        if (r.dailyEnergyRefill == 1) {
+          console.log(`${name} Claiming daily energy refill`);
+          await claimDailyEnergy(token.toString());
+          r = await getAccInfo(token.toString());
+          energy = r.energy;
+          continue;
+        } else {
+          dailyEnergyRefill = 0;
+          console.log(`${name} process done`);
+          console.log();
+          continue;
+        }
       }
     }
+
     return;
   } catch (error) {
     console.log('error');
