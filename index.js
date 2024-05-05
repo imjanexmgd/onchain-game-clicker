@@ -192,7 +192,9 @@ const claimDailyEnergy = async (token, name) => {
           continue;
         } else {
           dailyEnergyRefill = 0;
-          console.log(`${name} process done`);
+          console.log(
+            `${name} process done because no energy and no daily energy refill`
+          );
           console.log();
           continue;
         }
