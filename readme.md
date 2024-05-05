@@ -12,7 +12,7 @@ you can get it from request post https://db4.onchaincoin.io/api/validate and see
 example hash
 
 ```
-query_id=AAFD_OMAEP84yYqj5Re&user=%7B%22id%22%3A7094926403%2C%22first_name%22%3A%22pitch%22%2C%22last_name%22%3A%22black%22%2C%22username%22%3A%22ptc%22%2C%22language_code%22%3A%22en%22%2C%22allows_write_to_pm%22%3Atrue%7D&auth_date=1714700795&hash=40bc68dd0e9ba3e644a7d4cb5221131a3c90b7598f07866fe05df8acaa
+query_id=YOUROWN
 ```
 
 dont forget install the package
