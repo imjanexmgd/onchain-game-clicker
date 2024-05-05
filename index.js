@@ -118,7 +118,7 @@ const censoredName = (name) => {
 
   return censoredName;
 };
-const claimDailyEnergy = async (token) => {
+const claimDailyEnergy = async (token, name) => {
   try {
     const { data } = await axios.post(
       'https://db4.onchaincoin.io/api/boosts/energy',
@@ -142,7 +142,7 @@ const claimDailyEnergy = async (token) => {
         },
       }
     );
-    console.log(`${data.user.fullName} success claim daily energy refill`);
+    console.log(`${name} success claim daily energy refill`);
   } catch (error) {
     throw error;
   }
@@ -186,7 +186,7 @@ const claimDailyEnergy = async (token) => {
         }
         if (r.dailyEnergyRefill == 1) {
           console.log(`${name} Claiming daily energy refill`);
-          await claimDailyEnergy(token.toString());
+          await claimDailyEnergy(token.toString(), name);
           r = await getAccInfo(token.toString());
           energy = r.energy;
           continue;
