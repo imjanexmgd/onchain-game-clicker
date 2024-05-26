@@ -212,7 +212,7 @@ const claimDailyEnergy = async (token, name) => {
             `success ${clickAmount} click  energy ${doClick.energy}  coins ${doClick.coins}  points ${doClick.clicks} `
           );
           energy = doClick.energy;
-          const delay = 1500;
+          const delay = 0
           console.log(`Delaying ${delay} ms`);
           await setTimeout(delay);
         }
